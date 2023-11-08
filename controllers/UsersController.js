@@ -1,5 +1,5 @@
 const Users = require('../models/Users');
-
+const Account = require('../models/Accounts');
 module.exports = {
 
     LoginUser: async (req, res) => { 
@@ -31,4 +31,27 @@ module.exports = {
             // res.status(500).json("false load user");
         }
     },
+
+	RegisterUser: async (req, res) => {
+		try {
+		  const { phone, password } = req.body;
+	  
+		  // Tạo một tài khoản mới
+		  const account = new Account({
+			phone,
+			password
+		  });
+	  
+		  // Lưu tài khoản vào cơ sở dữ liệu
+		  await account.save();
+	  
+		  res.status(200).json({ message: "Đã đăng ký tài khoản thành công" });
+		} catch (error) {
+		  res.status(500).json({ message: "Lỗi trong quá trình đăng ký tài khoản" });
+		}
+	  }
+	  
+	  
+	  
+	  
 }
