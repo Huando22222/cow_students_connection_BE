@@ -2,14 +2,14 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
 	{
-		//  _id: { type: mongoose.Types.ObjectId, required: true  },
-		name: { type: "string", required: true },
-		// firstName: { type: "string", required: true },
-		// middleName: { type: "string", required: true },
-		// lastName: { type: "string", required: true },
-		// age: { type: Number, required: true },
-		// token: { type: "string", required: true },
-		// avatar: { type: "string" },
+		_id: { type: mongoose.Types.ObjectId, required: true },
+		firstName: { type: "string", required: true },
+		lastName: { type: "string", required: true },
+		age: { type: Number, required: true },
+		birthDate: { type: Date, required: true },
+		token: { type: "string", required: true },
+		avatar: { type: "string" },
+		idAcc: {type: "string", required: true}
 	},
 	{ timestamps: true }
 );
