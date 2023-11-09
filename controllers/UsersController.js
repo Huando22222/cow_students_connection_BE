@@ -11,14 +11,22 @@ module.exports = {
 			// const user = await Users.find().sort({ createdAt: -1 });    //send array object
 			// const userId = "65475c7b622dee003c7d60f0";         
 			// const user = await Users.findOne({ _id: userId });          //only 1 user
+			const user = await Account.findOne({
+				   phone: phone ,  password: password ,
+			  });
 			console.log(
+				user+
 				 "----------------test--------------------------"
 			);
 			// const data = { user: user, token: "token1234567890abc" };
 
 			// res.status(200).json({ message: "OK", data: user });
-			res.status(200).json({ message: "OK"});
-
+			
+			if (user !== null) {
+				res.status(200).json({ message: "OK", data: user });
+			  } else {
+				res.status(500).json("Loi Dang Nhap");
+			  }
 			// const { username, password } = req.body;
 			// console.log("username:  "+username);
 			// if (username === "123" && password === "123") {
@@ -28,7 +36,7 @@ module.exports = {
 			//     res.status(500).json("incorre"${AppConfig.baseUrl}""${AppConfig.baseUrl}"ct username or password");
 			// }
 		} catch (error) {
-            // res.status(500).json("false load user");
+            res.status(500).json("false load user");
         }
     },
 
@@ -54,10 +62,12 @@ module.exports = {
 			);
 			const user = await Account.findOne({
 				$or: [
-					{ $and: [{ phone: phone }, { id: { $exists: false } }] },
-					{ id: { $exists: true } },
-				],
-			});
+				  { $and: [{ phone: phone }, { id: "" }] },
+				  { $and: [{ id: id },{ id: { $ne: "" } }]},
+				]
+			  });
+			  
+			  
 			console.log(user);
 			if (user !== null) {
 				//return acc already exists
