@@ -34,18 +34,59 @@ module.exports = {
 
 	RegisterUser: async (req, res) => {
 		try {
-		  const { phone, password } = req.body;
+		  const {
+				phone,
+				password,
+				displayName,
+				email,
+				id,
+				photoUrl,
+			} = req.body;
 	  
-		  // Tạo một tài khoản mới
-		  const account = new Account({
-			phone,
-			password
-		  });
-	  
-		  // Lưu tài khoản vào cơ sở dữ liệu
-		  await account.save();
-	  
-		  res.status(200).json({ message: "Đã đăng ký tài khoản thành công" });
+			// Tạo một tài khoản mới
+			console.log(
+				phone,
+				password,
+				displayName,
+				email,
+				id,
+				photoUrl,
+			);
+			const user = await Account.findOne({
+				$or: [
+					{ $and: [{ phone: phone }, { id: { $exists: false } }] },
+					{ id: { $exists: true } },
+				],
+			});
+			console.log(user);
+			if (user !== null) {
+				//return acc already exists
+				console.log("acc already exists!");
+				res.status(500).json({
+					message: "acc already exists",
+				});
+			} else {
+				const account = new Account({
+					phone,
+					password,
+					displayName,
+					email,
+					id,
+					photoUrl,
+					// serverAuthCode: "",
+				});
+				
+				// Lưu tài khoản vào cơ sở dữ liệu
+				await account
+					.save()
+					.then(()=> {
+						console.log("Đã đăng ký tài khoản thành công");
+						res.status(200).json({
+							message: "Đã đăng ký tài khoản thành công",
+						});
+					})
+					.catch((err) => console.log(err));
+			}
 		} catch (error) {
 		  res.status(500).json({ message: "Lỗi trong quá trình đăng ký tài khoản" });
 		}

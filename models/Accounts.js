@@ -8,9 +8,9 @@ const accountSchema = new mongoose.Schema({
     email: { type: "string" },
     id: { type: "string" },
     photoUrl: { type: "string" },
-    serverAuthCode: { type: "string" },
+    // serverAuthCode: { type: "string" },
 
 });
 
 
-module.exports = mongoose.model("accounts", accountSchema);;
+module.exports = mongoose.model("accounts", accountSchema);
