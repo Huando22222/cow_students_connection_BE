@@ -16,7 +16,7 @@ module.exports = {
 			  });
 			console.log(
 				user+
-				 "----------------test--------------------------"
+				 "----------------test------------------------"
 			);
 			// const data = { user: user, token: "token1234567890abc" };
 
