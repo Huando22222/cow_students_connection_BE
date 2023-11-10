@@ -5,10 +5,11 @@ const UserSchema = new mongoose.Schema(
 		_id: { type: mongoose.Types.ObjectId, required: true },
 		firstName: { type: "string", required: true },
 		lastName: { type: "string", required: true },
-		age: { type: Number, required: true },
-		birthDate: { type: Date, required: true },
-		token: { type: "string", required: true },
-		avatar: { type: "string" },
+		birthDay: { type: Date, required: true },
+		gender: { type: "string", },
+		avatar: { type: "string", },
+		phone: { type: "string", },
+		// token: { type: "string", required: true },
 		idAcc: {type: "string", required: true}
 	},
 	{ timestamps: true }

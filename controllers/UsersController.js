@@ -1,4 +1,4 @@
-const Users = require("../models/Users");
+const User = require("../models/Users");
 const Account = require("../models/Accounts");
 module.exports = {
 	LoginUser: async (req, res) => {
@@ -6,14 +6,19 @@ module.exports = {
 			const { phone, password } = req.body;
 			console.log("user has:" + phone, password);
 
-			const user = await Account.findOne({
+			const acc = await Account.findOne({
 				phone: phone,
 				password: password,
 			});
-			console.log(user + "----------------test------------------------");
-			// const data = { user: user, token: "token1234567890abc" };
-			if (user !== null) {
-				res.status(200).json({ message: "OK", data: user });
+			// const data = { acc: acc, token: "token1234567890abc" };
+			if (acc !== null) {
+				const user = await User.findOne({ idAcc: acc._id });
+				console.log(acc+"\n"+user + "\n----------------test------------------------");
+				res.status(200).json({
+					message: "OK",
+					account: acc,
+					user: user ,
+				});
 			} else {
 				res.status(500).json("Loi Dang Nhap");
 			}
@@ -29,15 +34,15 @@ module.exports = {
 
 			// Tạo một tài khoản mới
 			console.log(phone, password, displayName, email, id, photoUrl);
-			const user = await Account.findOne({
+			const acc = await Account.findOne({
 				$or: [
 					{ $and: [{ phone: phone }, { id: "" }] },
 					{ $and: [{ id: id }, { id: { $ne: "" } }] },
 				],
 			});
 
-			console.log(user);
-			if (user !== null) {
+			console.log(acc);
+			if (acc !== null) {
 				//return acc already exists
 				console.log("acc already exists!");
 				res.status(500).json({
