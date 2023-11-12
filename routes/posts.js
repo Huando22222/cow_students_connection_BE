@@ -88,10 +88,10 @@
 // module.exports = router;
 //////////////////////////////////////////////////////////////////////////////////////////
 const express = require("express");
-const path = require("path");
-const router = express.Router();
-const multer = require("multer");
 const PostsController = require("../controllers/PostsController");
+const router = express.Router();
+const path = require("path");
+const multer = require("multer");
 
 
 const storage = multer.diskStorage({

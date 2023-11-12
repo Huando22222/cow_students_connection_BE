@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const UserSchema = new mongoose.Schema(
 	{
-		_id: { type: mongoose.Types.ObjectId, required: true },
+		// _id: { type: mongoose.Types.ObjectId, required: true },
 		firstName: { type: "string", required: true },
 		lastName: { type: "string", required: true },
 		birthDay: { type: Date, required: true },

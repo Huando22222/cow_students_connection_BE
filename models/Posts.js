@@ -16,8 +16,8 @@
 // module.exports = mongoose.model("posts", PostSchema);
 ///////////////////////////////////////////
 const mongoose = require("mongoose");
-const Images = require("./Images");
-const Users = require("./Users");
+// const Images = require("./Images");
+// const Users = require("./Users");
 const PostSchema = new mongoose.Schema(
 	{
 		ownerId: { type: "string", required: true },
