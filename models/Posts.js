@@ -21,10 +21,10 @@ const mongoose = require("mongoose");
 const PostSchema = new mongoose.Schema(
 	{
 		ownerId: { type: "string", required: true },
-		message: { type: "string" ,},
-		// date: { type: "string", required: true }, //string ??
+		message: { type: "string" },
+		// date: { type: Date, default: Date.now }, //string ??
 		// images: [{ type: mongoose.Schema.Types.ObjectId, ref: 'images' }],
-		images: { type: "string", },
+		images: { type: "string" },
 		likes: { type: Number, required: true },
 		createdAt: { type: Date, default: Date.now },
 	},

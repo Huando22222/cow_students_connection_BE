@@ -6,11 +6,12 @@ const UserSchema = new mongoose.Schema(
 		firstName: { type: "string", required: true },
 		lastName: { type: "string", required: true },
 		birthDay: { type: Date, required: true },
-		gender: { type: "string", },
-		avatar: { type: "string", },
-		phone: { type: "string", },
+		gender: { type: "string" },
+		avatar: { type: "string" },
+		phone: { type: "string" },
+		friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
 		// token: { type: "string", required: true },
-		idAcc: {type: "string", required: true}
+		idAcc: { type: "string", required: true },
 	},
 	{ timestamps: true }
 );
