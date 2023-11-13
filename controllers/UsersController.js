@@ -1,6 +1,26 @@
 const User = require("../models/Users");
 const Account = require("../models/Accounts");
+const path = require("path");
 module.exports = {
+	test: async (req, res) => {
+		try {
+
+			res.status(200).json({
+				message: "OK",
+			});
+		} catch (error) {
+			res.status(500).json("false load user");
+		}
+	},
+	test1: async (req, res) => {
+		try {
+			res.status(200).json({
+				message: "OK",
+			});
+		} catch (error) {
+			res.status(500).json("false load user");
+		}
+	},
 	LoginUser: async (req, res) => {
 		try {
 			const { phone, password } = req.body;
@@ -10,7 +30,7 @@ module.exports = {
 				phone: phone,
 				password: password,
 			});
-			// const data = { acc: acc, token: "token1234567890abc" };
+
 			if (acc !== null) {
 				const user = await User.findOne({ idAcc: acc._id });
 				console.log(
@@ -50,17 +70,9 @@ module.exports = {
 				birthDay,
 				gender,
 				phone,
-				idAcc,
+				idAcc
 			);
-		// _id: { type: mongoose.Types.ObjectId, required: true },
-		// firstName: { type: "string", required: true },
-		// lastName: { type: "string", required: true },
-		// birthDay: { type: Date, required: true },
-		// gender: { type: "string", },
-		// avatar: { type: "string", },
-		// phone: { type: "string", },
-		// // token: { type: "string", required: true },
-		// idAcc: {type: "string", required: true}
+
 			const user = new User({
 				firstName,
 				lastName,
@@ -71,15 +83,16 @@ module.exports = {
 				idAcc,
 			});
 			console.log("profile filled " + user);
-				await user
-					.save()
-					.then(() => {
-						console.log("profile filled thành công " + user);
-						res.status(200).json({
-							message: "profile filled thành công",user:  user
-						});
-					})
-					.catch((err) => console.log(err));
+			await user
+				.save()
+				.then(() => {
+					console.log("profile filled thành công " + user);
+					res.status(200).json({
+						message: "profile filled thành công",
+						user: user,
+					});
+				})
+				.catch((err) => console.log(err));
 		} catch (error) {
 			res.status(500).json("false load user");
 		}
@@ -87,7 +100,8 @@ module.exports = {
 
 	RegisterUser: async (req, res) => {
 		try {
-			const { phone, password, displayName, email, id, photoUrl }=req.body;
+			const { phone, password, displayName, email, id, photoUrl } =
+				req.body;
 			console.log(phone, password, displayName, email, id, photoUrl);
 			const acc = await Account.findOne({
 				$or: [
