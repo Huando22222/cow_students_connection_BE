@@ -107,6 +107,7 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/new", upload.single("images"), PostsController.NewPost);
+router.get("/", express.static(path.join(__dirname, "../public/images")), PostsController.GetPost);
 // router.post("/images", upload.single("file"), async (req, res) => {
 // 	// const imagePath = path.join("/public/images", req.file.filename);
 	

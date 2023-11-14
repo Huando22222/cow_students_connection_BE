@@ -20,7 +20,11 @@ const mongoose = require("mongoose");
 // const Users = require("./Users");
 const PostSchema = new mongoose.Schema(
 	{
-		ownerId: { type: "string", required: true },
+		owner: {
+			type: mongoose.Schema.Types.ObjectId,
+			ref: "users",
+			required: true,
+		},
 		message: { type: "string" },
 		images: { type: "string" },
 		likes: { type: Number, required: true },
