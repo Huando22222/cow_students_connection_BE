@@ -11,6 +11,7 @@ dotenv.config();
 app.use(express.static('public'));
 // app.use(express.static(path.join("./BE_projMobileApp", "images")));
 const port = 3000;
+// app.use(express.static(path.join(__dirname, "public/images")));
 
 mongoose
 	.connect(process.env.MONGO_URL, {

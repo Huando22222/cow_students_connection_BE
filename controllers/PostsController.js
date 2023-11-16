@@ -4,16 +4,18 @@ module.exports = {
   NewPost: async (req, res) => {
     try {
 		const { owner, message } = req.body;
-		const images = req.file.filename;
+		const images = req.file? req.file.filename : "";
 
 		const post = new Post({
 			owner: owner,
 			message: message,
-			images: images, // Correct variable name here
+			images: images, 
 			likes: 0,
     });
 
-      console.log(images + "----------------test post ok------------------------");
+      console.log( "----------------test image ok------------------------");
+      console.log( "----------------test image ok------------------------");
+      console.log(images );
 
       await post
         .save()
@@ -33,7 +35,9 @@ module.exports = {
   GetPost: async (req, res) => {
 	try {
 		console.log("----------------send posts to client------------------------");
-		const post = await Post.find().populate("owner");
+		const post = await Post.find()
+			.populate("owner")
+			.sort({ createdAt: -1 });
 		res.status(200).json({ message: "OK" , data : post});
     } catch (error) {
 		console.error(error);
