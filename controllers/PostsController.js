@@ -14,6 +14,7 @@ module.exports = {
     });
 
       console.log( "----------------test image ok------------------------");
+      console.log( "----------------test image ok------------------------");
       console.log(images );
 
       await post
