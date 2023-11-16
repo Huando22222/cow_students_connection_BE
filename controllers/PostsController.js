@@ -1,4 +1,5 @@
 const Post = require('../models/Posts');
+const User = require('../models/Users');
 
 module.exports = {
   NewPost: async (req, res) => {
@@ -12,7 +13,7 @@ module.exports = {
 			images: images, 
 			likes: 0,
     });
-
+    console.log(owner );
       console.log( "----------------test image ok------------------------");
       console.log( "----------------test image ok------------------------");
       console.log(images );
@@ -21,11 +22,16 @@ module.exports = {
         .save()
         .then(() => {
           console.log("posted successfully");
-          res.status(200).json({
-            message: "posted successfully",
-          });
+        
         })
         .catch((err) => console.log(err));
+        const newP = await Post.findOne({owner:owner}).sort({ createdAt: -1 }).populate("owner")
+          .populate("owner")
+          res.status(200).json({
+             message: "posted successfully", post : newP /////////////////////
+            
+          });
+          console.log(newP);
     } catch (error) {
 		console.error(error);
 		res.status(500).json({ message: "Internal Server Error" });
