@@ -14,20 +14,21 @@ const storage = multer.diskStorage({
 	},
 });
 
-const checkUserId = (req, res, next) => {
-	const userId = req.params.id; // Assuming the user ID is in the route parameters
-	// Check if the user has the right to access the folder
-	if (userId === "12345") {
-		next(); // Continue to the next middleware or route handler
-	} else {
-		res.status(403).json({ message: "Unauthorized access" });
-	}
-};
+// const checkUserId = (req, res, next) => {
+// 	const userId = req.params.id; // Assuming the user ID is in the route parameters
+// 	// Check if the user has the right to access the folder
+// 	if (userId === "12345") {
+// 		next(); // Continue to the next middleware or route handler
+// 	} else {
+// 		res.status(403).json({ message: "Unauthorized access" });
+// 	}
+// };
 const upload = multer({ storage });
 router.post("/login", UsersController.LoginUser);
 router.post("/profile", upload.single("avatar"), UsersController.profile);
 router.post("/profileUpdate", upload.single("avatar"), UsersController.profileUpdate);
 router.post("/register", UsersController.RegisterUser);
+
 router.get("/profileEdit",UsersController.test);
 
 router.use("/test1/:id", checkUserId, express.static(path.join(__dirname, "../public/images")));

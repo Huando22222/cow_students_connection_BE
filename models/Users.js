@@ -9,7 +9,7 @@ const UserSchema = new mongoose.Schema(
 		gender: { type: "string" },
 		avatar: { type: "string" },
 		phone: { type: "string" },
-		friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
+		friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
 		// token: { type: "string", required: true },
 		idAcc: { type: "string", required: true },
 	},
