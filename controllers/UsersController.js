@@ -2,29 +2,29 @@ const User = require("../models/Users");
 const Account = require("../models/Accounts");
 const path = require("path");
 module.exports = {
-	test: async (req, res) => {
-		try {
+	// test: async (req, res) => {
+	// 	try {
 
-			res.status(200).json({
-				message: "OK",
-			});
-		} catch (error) {
-			res.status(500).json("false load user");
-		}
-	},
-	test1: async (req, res) => {
-		try {
-			res.status(200).json({
-				message: "OK",
-			});
-		} catch (error) {
-			res.status(500).json("false load user");
-		}
-	},
+	// 		res.status(200).json({
+	// 			message: "OK",
+	// 		});
+	// 	} catch (error) {
+	// 		res.status(500).json("false load user");
+	// 	}
+	// },
+	// test1: async (req, res) => {
+	// 	try {
+	// 		res.status(200).json({
+	// 			message: "OK",
+	// 		});
+	// 	} catch (error) {
+	// 		res.status(500).json("false load user");
+	// 	}
+	// },
 	LoginUser: async (req, res) => {
 		try {
 			const { phone, password } = req.body;
-			console.log("user has:" + phone, password);
+			// console.log("user has:" + phone, password);
 
 			const acc = await Account.findOne({
 				phone: phone,
@@ -33,12 +33,12 @@ module.exports = {
 
 			if (acc !== null) {
 				const user = await User.findOne({ idAcc: acc._id });
-				console.log(
-					acc +
-						"\n" +
-						user +
-						"\n----------------test------------------------"
-				);
+				// console.log(
+				// 	acc +
+				// 		"\n" +
+				// 		user +
+				// 		"\n----------------test------------------------"
+				// );
 				res.status(200).json({
 					message: "OK",
 					account: acc,
@@ -64,14 +64,14 @@ module.exports = {
 				idAcc,
 			} = req.body;
 			const avatar = req.file.filename;
-			console.log(
-				"user profile: " + firstName,
-				lastName,
-				birthDay,
-				gender,
-				phone,
-				idAcc
-			);
+			// console.log(
+			// 	"user profile: " + firstName,
+			// 	lastName,
+			// 	birthDay,
+			// 	gender,
+			// 	phone,
+			// 	idAcc
+			// );
 
 			const user = new User({
 				firstName,
@@ -82,11 +82,11 @@ module.exports = {
 				phone,
 				idAcc,
 			});
-			console.log("profile filled " + user);
+			// console.log("profile filled " + user);
 			await user
 				.save()
 				.then(() => {
-					console.log("profile filled thành công " + user);
+					// console.log("profile filled thành công " + user);
 					res.status(200).json({
 						message: "profile filled thành công",
 						user: user,
@@ -110,10 +110,10 @@ module.exports = {
 				],
 			});
 
-			console.log(acc);
+			// console.log(acc);
 			if (acc !== null) {
 				//return acc already exists
-				console.log("acc already exists!");
+				// console.log("acc already exists!");
 				res.status(500).json({
 					message: "acc already exists",
 				});
