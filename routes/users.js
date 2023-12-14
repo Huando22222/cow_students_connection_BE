@@ -26,9 +26,10 @@ const checkUserId = (req, res, next) => {
 const upload = multer({ storage });
 router.post("/login", UsersController.LoginUser);
 router.post("/profile", upload.single("avatar"), UsersController.profile);
+router.post("/profileUpdate", upload.single("avatar"), UsersController.profileUpdate);
 router.post("/register", UsersController.RegisterUser);
-router.get("/test",UsersController.test
-);
+router.get("/profileEdit",UsersController.test);
+
 router.use("/test1/:id", checkUserId, express.static(path.join(__dirname, "../public/images")));
 
 module.exports = router;
