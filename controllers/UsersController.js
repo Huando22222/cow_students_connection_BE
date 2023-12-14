@@ -51,7 +51,47 @@ module.exports = {
 			res.status(500).json("false load user");
 		}
 	},
+	
+	profileUpdate: async (req, res) => {
+		try {
+			const { firstName, lastName, birthDay, gender, phone, idAcc } = req.body;
+	
+			const avatar = req.file ? req.file.filename : null;
 
+			console.log(
+				"user profile updated: " +
+				firstName,
+				lastName,
+				birthDay,
+				gender,
+				phone,
+				idAcc
+			);
+	
+			const existingUser = await User.findOne({ idAcc });
+	
+			if (avatar !== null) {
+				existingUser.avatar = avatar;
+			}
+	
+			existingUser.firstName = firstName || existingUser.firstName;
+			existingUser.lastName = lastName || existingUser.lastName;
+			existingUser.birthDay = birthDay || existingUser.birthDay;
+			existingUser.gender = gender || existingUser.gender;
+			existingUser.phone = phone || existingUser.phone;
+	
+			const updatedUser = await existingUser.save();
+	
+			res.status(200).json({
+				message: "User profile updated successfully",
+				user: updatedUser,
+			});
+		} catch (error) {
+			res.status(500).json({ message: "Failed to update user profile" });
+		}
+	},
+	
+	
 	profile: async (req, res) => {
 		try {
 			const {
@@ -97,6 +137,7 @@ module.exports = {
 			res.status(500).json("false load user");
 		}
 	},
+	
 
 	RegisterUser: async (req, res) => {
 		try {
