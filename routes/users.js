@@ -29,8 +29,8 @@ router.post("/profile", upload.single("avatar"), UsersController.profile);
 router.post("/profileUpdate", upload.single("avatar"), UsersController.profileUpdate);
 router.post("/register", UsersController.RegisterUser);
 
-router.get("/profileEdit",UsersController.test);
+// router.get("/profileEdit",UsersController.test);
 
-router.use("/test1/:id", checkUserId, express.static(path.join(__dirname, "../public/images")));
+// router.use("/test1/:id", checkUserId, express.static(path.join(__dirname, "../public/images")));
 
 module.exports = router;
