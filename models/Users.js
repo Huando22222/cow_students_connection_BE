@@ -11,6 +11,7 @@ const UserSchema = new mongoose.Schema(
 		phone: { type: "string" },
 		friends: [{ type: mongoose.Schema.Types.ObjectId, ref: "users" }],
 		// token: { type: "string", required: true },
+		rooms: [{ type: mongoose.Schema.Types.ObjectId }],
 		idAcc: { type: "string", required: true },
 	},
 	{ timestamps: true }

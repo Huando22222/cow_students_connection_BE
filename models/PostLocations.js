@@ -15,8 +15,9 @@ const PostLocationSchema = new mongoose.Schema(
       required: true,
     },
     message: { type: "string" },
-    location: locationSchema
-  },
+    location: locationSchema,
+    isDeleted: { type: Boolean, required: true,default: false}
+    },
   { timestamps: true }
 );
 

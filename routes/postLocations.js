@@ -6,6 +6,7 @@ const router = express.Router();
 
 
 router.post("/new", PostLocationController.NewPostLocation);
+router.post("/delete", PostLocationController.DeletePostLocation);
 router.get("/", PostLocationController.GetPostLocations);
 
 module.exports = router;
