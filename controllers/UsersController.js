@@ -16,10 +16,15 @@ module.exports = {
 
 			if (acc !== null) {
 				const user = await User.findOne({ idAcc: acc._id });
-				const room = await Room.find({
-					_id: { $in: user.rooms },
-				}).populate("users");
-				
+				let room= null;
+				/*const */
+				if (user !== null) { 
+					const rooms = await Room.find({
+						_id: { $in: user.rooms },
+					}).populate("users");
+					room = rooms;
+				}
+
 				// console.log("user has:" + room);
 				res.status(200).json({
 					message: "OK",
