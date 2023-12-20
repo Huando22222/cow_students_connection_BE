@@ -1,26 +1,9 @@
 const User = require("../models/Users");
 const Account = require("../models/Accounts");
 const path = require("path");
+const Room = require("../models/Rooms");
 module.exports = {
-	// test: async (req, res) => {
-	// 	try {
-
-	// 		res.status(200).json({
-	// 			message: "OK",
-	// 		});
-	// 	} catch (error) {
-	// 		res.status(500).json("false load user");
-	// 	}
-	// },
-	// test1: async (req, res) => {
-	// 	try {
-	// 		res.status(200).json({
-	// 			message: "OK",
-	// 		});
-	// 	} catch (error) {
-	// 		res.status(500).json("false load user");
-	// 	}
-	// },
+	
 	LoginUser: async (req, res) => {
 		try {
 			const { phone, password } = req.body;
@@ -33,16 +16,16 @@ module.exports = {
 
 			if (acc !== null) {
 				const user = await User.findOne({ idAcc: acc._id });
-				// console.log(
-				// 	acc +
-				// 		"\n" +
-				// 		user +
-				// 		"\n----------------test------------------------"
-				// );
+				const room = await Room.find({
+					_id: { $in: user.rooms },
+				}).populate("users");
+				
+				// console.log("user has:" + room);
 				res.status(200).json({
 					message: "OK",
 					account: acc,
 					user: user,
+					room: room,
 				});
 			} else {
 				res.status(500).json("Loi Dang Nhap");
@@ -104,14 +87,6 @@ module.exports = {
 				idAcc,
 			} = req.body;
 			const avatar = req.file.filename;
-			// console.log(
-			// 	"user profile: " + firstName,
-			// 	lastName,
-			// 	birthDay,
-			// 	gender,
-			// 	phone,
-			// 	idAcc
-			// );
 
 			const user = new User({
 				firstName,
@@ -126,7 +101,11 @@ module.exports = {
 			await user
 				.save()
 				.then(() => {
-					// console.log("profile filled thành công " + user);
+					const userId = user._id;
+					User.updateOne(
+						{ _id: userId },
+						{ $push: { rooms: userId } }
+					);
 					res.status(200).json({
 						message: "profile filled thành công",
 						user: user,
