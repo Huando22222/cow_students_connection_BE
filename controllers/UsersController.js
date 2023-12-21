@@ -16,10 +16,16 @@ module.exports = {
 
 			if (acc !== null) {
 				const user = await User.findOne({ idAcc: acc._id });
-				const room = await Room.find({
-					_id: { $in: user.rooms },
-				}).populate("users");
-				
+				let room= [];
+				/*const */
+				if (user !== null) { 
+					const rooms = await Room.find({
+						_id: { $in: user.rooms },
+					}).populate("users");
+					room = rooms;
+					console.log(room);
+				}
+
 				// console.log("user has:" + room);
 				res.status(200).json({
 					message: "OK",
@@ -123,6 +129,8 @@ module.exports = {
 			const { phone, password, displayName, email, id, photoUrl } =
 				req.body;
 			console.log(phone, password, displayName, email, id, photoUrl);
+			
+			console.log(phone, password); 
 			const acc = await Account.findOne({
 				$or: [
 					{ $and: [{ phone: phone }, { id: "" }] },

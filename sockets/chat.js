@@ -1,7 +1,7 @@
 // chatSocketManager.js
 const Message = require("../models/Messages");
 const Room = require("../models/Rooms");
-
+const User = require("../models/Users");
 function generateRandomRoomName(length) {
 	const characters =
 		"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -30,20 +30,31 @@ module.exports = function (io) {
 			);
 		});
 		/// on create room ?
-		socket.on("create-room", async (member) => { 
+		socket.on("create-room", async (member) => {//firstMsg
 			if (Array.isArray(member) && member.length > 0) {
 				// console.log("Received members:", member[0]);
 				const newRoom = new Room({
 					roomName: generateRandomRoomName(10),
 					users: member,
 				});
-				await newRoom.save()
+				await newRoom.save();
 				const data = await Room.findOne({
 					_id: newRoom._id,
-				}).populate("users");	
+				}).populate("users");
+				// chua cap nhat room trong user
+				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				const users = await User.find({ _id: { $in: member } });
 
+				const updatePromises = users.map(async (user) => {
+					user.rooms.push(newRoom._id);
+					await user.save();
+				});
+
+				await Promise.all(updatePromises);
+				/////////////////////////////////////////////////////////////////
 				if (data != null) {
 					io.to(member).emit("add-room", data); // thieu du kien tối về update
+					//io.to(data._id).emit("recieve", message);;//??????????????????????????????????????????????????????????????????????????????????
 					console.log("created room:", data);
 				} else {
 					console.log("false in find room process");
@@ -60,19 +71,20 @@ module.exports = function (io) {
 
 
 
-		socket.on("send-to", async(data ) => { //////// dung rồi k cần sửa nữa thằng ngu huấnnnnnnnnn
+		socket.on("send-to", async(data ) => {
+			//////// dung rồi k cần sửa nữa thằng ngu huấnnnnnnnnn
 			const message = JSON.parse(data);
-			const newMessage = new Message(message);
-			console.log(newMessage.sender);
+			const newMessage = new Message(message); // chua check content == nullS ỏ ""
 
-			await newMessage.save().then(() => {
-				io.to(newMessage.room).emit("recieve", newMessage);
-				console.log("emit:  ", newMessage);
+			await newMessage.save()
+				.then(() => {
+				// io.to(newMessage.room).emit("recieve", newMessage);
+				// console.log("emit:  ", newMessage);
+					
+				io.to(message.room).emit("recieve", message);
+				console.log("emit:  ", message);
 			});
-
 			
-			// io.to(message.room).emit("recieve", message);
-			// console.log("emit:  ", message);
 		});
 	});
 
