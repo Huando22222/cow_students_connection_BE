@@ -25,14 +25,16 @@ module.exports = function (io) {
 			const data = await Message.find({ room: room }).populate("sender"); //{room: room}
 			//hinh nhu chi emit toi ng gui su kien ?? hay toan bo server???
 			io.to(room).emit("server-message" , data );
+			console.log("server-message", data[0]);
 			console.log(
 				`Socket ${socket.id} joined room: ${room} - data: ${data.length}`
 			);
 		});
 		/// on create room ?
-		socket.on("create-room", async (member) => {//firstMsg
+		socket.on("create-room", async ({ member, msg }) => {
+			// const Messages2 = JSON.parse(Messages);
+			//firstMsg
 			if (Array.isArray(member) && member.length > 0) {
-				// console.log("Received members:", member[0]);
 				const newRoom = new Room({
 					roomName: generateRandomRoomName(10),
 					users: member,
@@ -41,8 +43,7 @@ module.exports = function (io) {
 				const data = await Room.findOne({
 					_id: newRoom._id,
 				}).populate("users");
-				// chua cap nhat room trong user
-				//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+				// //////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 				const users = await User.find({ _id: { $in: member } });
 
 				const updatePromises = users.map(async (user) => {
@@ -51,19 +52,39 @@ module.exports = function (io) {
 				});
 
 				await Promise.all(updatePromises);
-				/////////////////////////////////////////////////////////////////
 				if (data != null) {
-					io.to(member).emit("add-room", data); // thieu du kien tối về update
-					//io.to(data._id).emit("recieve", message);;//??????????????????????????????????????????????????????????????????????????????????
+					const newMsg = JSON.parse(msg);
+					const newMessage = new Message({
+						content: newMsg.content,
+						sender:newMsg.sender,
+						room: data._id,
+					}); // chua check content == nullS ỏ ""
+					if (
+						newMessage.content != null &&
+						newMessage.content != ""
+					) {
+						await newMessage.save();
+						// 	.then(() => {
+						// 	io.to(member).emit("add-room", data);
+						// 	io.to(data._id).emit("recieve", newMessage);
+						// 	console.log("create & emit:  ", newMessage );
+						// });
+						let dataMsg;
+						dataMsg = await Message.findById({
+							_id: newMessage._id,
+						}).populate("sender").then(() => {
+							io.to(member).emit("add-room", data);// 1 member ?? chua test data // nen de trong loop 
+							io.to(data._id).emit("recieve", dataMsg);
+							console.log("create & emit:  ", dataMsg);
+						}); 
+					}
 					console.log("created room:", data);
 				} else {
 					console.log("false in find room process");
 				}
-				// io.to(member).emit("add-room", room); // thieu du kien tối về update
-				// console.log("created room:", room);
-				member.forEach((userId) => {
-					console.log("room userID:", userId);
-				});
+				// member.forEach((userId) => {
+				// 	console.log("room userID:", userId);
+				// });
 			} else {
 				console.log("Invalid member data received.");
 			}
@@ -72,19 +93,28 @@ module.exports = function (io) {
 
 
 		socket.on("send-to", async(data ) => {
-			//////// dung rồi k cần sửa nữa thằng ngu huấnnnnnnnnn
 			const message = JSON.parse(data);
-			const newMessage = new Message(message); // chua check content == nullS ỏ ""
-
-			await newMessage.save()
-				.then(() => {
-				// io.to(newMessage.room).emit("recieve", newMessage);
-				// console.log("emit:  ", newMessage);
-					
-				io.to(message.room).emit("recieve", message);
-				console.log("emit:  ", message);
-			});
-			
+			const newMessage = new Message(message);
+			if (newMessage.content != null && newMessage.content != "" ) {
+				await newMessage.save()
+				// .then(() => {
+				// 	io.to(message.room).emit("recieve", message);
+				// 	console.log("emit:  ", message);
+				// 	console.log("emit:  ", newMessage);
+				// });
+				
+				// let dataMsg;
+				//dataMsg =
+					await Message.findById({
+						_id: newMessage._id,
+					})
+						.populate("sender")
+						.then((message) => {
+							io.to(message.room.toString()).emit("recieve", message);
+							console.log("message: ", message);
+							console.log("message.room: ", message.room);
+						});  /// k nhan dataMsg
+			}
 		});
 	});
 
