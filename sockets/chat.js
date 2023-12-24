@@ -74,7 +74,7 @@ module.exports = function (io) {
 							_id: newMessage._id,
 						}).populate("sender").then(() => {
 							io.to(member).emit("add-room", data);// 1 member ?? chua test data // nen de trong loop 
-							io.to(data._id).emit("recieve", dataMsg);
+							// io.to(data._id).emit("recieve", dataMsg); // client joined room -> server send old msg back to client
 							console.log("create & emit:  ", dataMsg);
 						}); 
 					}
